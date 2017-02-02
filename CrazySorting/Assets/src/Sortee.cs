@@ -7,11 +7,14 @@ public class Sortee : MonoBehaviour {
     private Vector3 mStartScale;
     private float timeToChangeDirection;
     private float lastY;
+    private bool mIsDragging;
 
     // Use this for initialization
     void Start () {
         mStartPosition = transform.position;
         mStartScale = transform.localScale;
+
+        mCurrentPos = mLastPos = mStartPosition;
 
         //ChangeDirection();
 	}
@@ -25,7 +28,6 @@ public class Sortee : MonoBehaviour {
         rb.useGravity = false;
         rb.isKinematic = true;
         transform.up = Vector3.up;
-        
     }
 
     void OnMouseUp()
@@ -33,20 +35,32 @@ public class Sortee : MonoBehaviour {
         var rb = GetComponent<Rigidbody>();
         rb.useGravity = true;
         rb.isKinematic = false;
+        mIsDragging = false;
+
+        rb.AddForce((transform.position - mLastPos) * 500);
     }
 
     void OnMouseDrag()
     {
+        mIsDragging = true;
         float distance_to_screen = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
         var worldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, distance_to_screen));
         transform.position = new Vector3(worldPos.x, transform.position.y, worldPos.z);
     }
 
+    Vector3 mLastPos = Vector3.zero;
+    Vector3 mCurrentPos = Vector3.zero;
+
     public void Update()
     {
+        mLastPos = mCurrentPos;
+        mCurrentPos = transform.position;
 
-        return;
+        //UpdateDirection();
+    }
 
+    void UpdateDirection()
+    {
         timeToChangeDirection -= Time.deltaTime;
 
         if (timeToChangeDirection <= 0)
@@ -58,7 +72,6 @@ public class Sortee : MonoBehaviour {
 
         var v = transform.forward * 2;
         rb.velocity = new Vector3(v.x, 0, v.y);
-
     }
 
     private void ChangeDirection()
