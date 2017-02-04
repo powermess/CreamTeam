@@ -22,6 +22,7 @@ namespace CrazySorting
             ChangeLogUIText.text = ChangeLog.text;
 
             PlayerPrefs.SetInt("ChangeLogLength", text.Length);
+
         }
 
         public void Dismiss()
