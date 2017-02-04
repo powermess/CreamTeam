@@ -9,6 +9,10 @@ public class Sortee : MonoBehaviour {
     private float lastY;
     private bool mIsDragging;
 
+    private Vector3 offset;
+
+    private float mTimeStartDragging;
+
     // Use this for initialization
     void Start () {
         mStartPosition = transform.position;
@@ -19,16 +23,21 @@ public class Sortee : MonoBehaviour {
         //ChangeDirection();
 	}
 	
-    Vector3 offset;
+    
 
     void OnMouseDown()
     {
-        transform.localPosition = new Vector3(transform.position.x, 3, transform.position.z);
+        mTimeStartDragging = Time.time;
+
         var rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
         rb.isKinematic = true;
-        transform.up = Vector3.up;
-        Debug.Log("another debug message");
+
+        transform.position += Vector3.Normalize(Camera.main.transform.position - transform.position) / 2f;
+        var screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+        offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
+
+        transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
     }
 
     void OnMouseUp()
@@ -36,18 +45,25 @@ public class Sortee : MonoBehaviour {
         var rb = GetComponent<Rigidbody>();
         rb.useGravity = true;
         rb.isKinematic = false;
-        mIsDragging = false;
 
         rb.AddForce((transform.position - mLastPos) * 500);
     }
 
-    void OnMouseDrag()
+
+
+void OnMouseDrag()
     {
-        mIsDragging = true;
-        float distance_to_screen = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
-        var worldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, distance_to_screen));
-        transform.position = new Vector3(worldPos.x, transform.position.y, worldPos.z);
-    }
+        var screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+        Vector3 cursorPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
+        transform.position = Camera.main.ScreenToWorldPoint(cursorPoint) + offset;
+
+    //if (transform.up.y != 0)
+    //{
+    //    transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, new Vector3(0, transform.localEulerAngles.y, 0), (Time.time - mTimeStartDragging));
+    //}
+
+
+}
 
     Vector3 mLastPos = Vector3.zero;
     Vector3 mCurrentPos = Vector3.zero;
