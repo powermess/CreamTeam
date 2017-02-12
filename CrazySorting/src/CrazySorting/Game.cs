@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 class Game : MonoBehaviour
 {
 
     public GameObject GameOverSign;
+
+    int mScore;
 
     private void Awake()
     {
@@ -25,6 +28,9 @@ class Game : MonoBehaviour
         if(character.Faction != goal.Faction)
         {
             GameOver();
+        }else
+        {
+            mScore++;
         }
     }
 
@@ -41,6 +47,7 @@ class Game : MonoBehaviour
     void GameOver()
     {
         GameOverSign.SetActive(true);
+        GameOverSign.transform.FindChild("Score").GetComponent<Text>().text = mScore.ToString();
     }
 
     public void Reset()
