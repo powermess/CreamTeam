@@ -3,27 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Character : MonoBehaviour
+class Character : MonoBehaviour
 {
     public Faction Faction;
 
     public event Action<Character, Goal> OnEnteredGoal;
     Dictionary<Collider2D, Goal> mGoals;
     Collider2D mCollider;
-    DraggableCharacterBehaviour mDraggableBehaviour;
+    IDraggableCharacter mDraggableBehaviour;
 
     void Awake()
     {
         mGoals = FindObjectsOfType<Goal>().ToDictionary(k => k.GetComponent<Collider2D>(), v => v);
         mCollider = GetComponent<Collider2D>();
-
-        mDraggableBehaviour = gameObject.AddComponent<DraggableCharacterBehaviour>();
-        mDraggableBehaviour.OnCharacterReleased += CheckIfInGoal;
     }
 
     void OnDestroy()
     {
-        mDraggableBehaviour.OnCharacterReleased -= CheckIfInGoal;
     }
 
     void CheckIfInGoal()
@@ -50,5 +46,11 @@ public class Character : MonoBehaviour
     public void Stop()
     {
         mDraggableBehaviour.DisableDragging();
+    }
+
+    public void Register(IDraggableCharacter draggable)
+    {
+        mDraggableBehaviour = draggable;
+        mDraggableBehaviour.SetOnMouseUpAction(CheckIfInGoal);
     }
 }

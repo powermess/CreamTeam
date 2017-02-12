@@ -45,7 +45,6 @@ class Game : MonoBehaviour
 
     void GameOver()
     {
-        Debug.Log("Game Over");
         GameOverSign.SetActive(true);
     }
 

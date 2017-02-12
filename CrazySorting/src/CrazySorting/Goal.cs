@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class Goal : MonoBehaviour
+class Goal : MonoBehaviour
 {
     public Faction Faction;
 }

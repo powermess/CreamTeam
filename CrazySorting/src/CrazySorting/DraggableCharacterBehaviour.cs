@@ -1,17 +1,28 @@
 ﻿using System;
 using UnityEngine;
 
-
-[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(Character), typeof(BoxCollider2D))]
 class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
 {
     public float PickUpScaleFactor = 1.5f;
 
-    public event Action OnCharacterReleased;
-
     float mDistToCamera;
     Vector3 mOffset;
     Vector3 mPreviousScale;
+    private Action mOnMouseUpAction;
+    Character mCharacter;
+
+
+    public void DisableDragging()
+    {
+        GetComponent<Collider2D>().enabled = false;
+    }
+
+    void Awake()
+    {
+        mCharacter = GetComponent<Character>();
+        mCharacter.Register(this);
+    }
 
     void OnMouseDown()
     {
@@ -21,10 +32,10 @@ class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
         mOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, mDistToCamera));
     }
 
-    private void OnMouseUp()
+    void OnMouseUp()
     {
         transform.localScale = mPreviousScale;
-        OnCharacterReleased?.Invoke();
+        mOnMouseUpAction?.Invoke();
     }
 
     void OnMouseDrag()
@@ -33,8 +44,8 @@ class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
         transform.position = Camera.main.ScreenToWorldPoint(newPosition) + mOffset;
     }
 
-    internal void DisableDragging()
+    public void SetOnMouseUpAction(Action onMouseUpAction)
     {
-       // GetComponent<Collider2D>().enabled = false;
+        mOnMouseUpAction = onMouseUpAction;
     }
 }
