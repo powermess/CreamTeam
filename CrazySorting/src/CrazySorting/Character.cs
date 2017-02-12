@@ -10,7 +10,6 @@ public class Character : MonoBehaviour
     public event Action<Character, Goal> OnEnteredGoal;
     Dictionary<Collider2D, Goal> mGoals;
     Collider2D mCollider;
-    bool mIsActive = true;
     DraggableCharacterBehaviour mDraggableBehaviour;
 
     void Awake()
@@ -50,8 +49,6 @@ public class Character : MonoBehaviour
 
     public void Stop()
     {
-        Debug.Log("Stopping character");
-        mIsActive = false;
         mDraggableBehaviour.DisableDragging();
     }
 }

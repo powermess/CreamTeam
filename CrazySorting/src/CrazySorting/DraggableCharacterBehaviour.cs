@@ -35,6 +35,6 @@ class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
 
     internal void DisableDragging()
     {
-        GetComponent<Collider2D>().enabled = false;
+       // GetComponent<Collider2D>().enabled = false;
     }
 }

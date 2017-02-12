@@ -8,13 +8,24 @@ using UnityEngine.UI;
 
 class Game : MonoBehaviour
 {
+
+    public GameObject GameOverSign;
+    List<Character> mCharacters;
+
     private void Awake()
     {
         Initialize();
 
-        var characters = FindObjectsOfType<Character>().ToList();
+        mCharacters = FindObjectsOfType<Character>().ToList();
 
-        characters.ForEach(c => c.OnEnteredGoal += HandleCharaterEnteredGoalEvent);
+        mCharacters.ForEach(c => c.OnEnteredGoal += HandleCharaterEnteredGoalEvent);
+
+        GameOverSign.SetActive(false);
+    }
+
+    private void OnDestroy()
+    {
+        mCharacters?.ForEach(c => c.OnEnteredGoal -= HandleCharaterEnteredGoalEvent);
     }
 
     private void HandleCharaterEnteredGoalEvent(Character character, Goal goal)
@@ -35,5 +46,11 @@ class Game : MonoBehaviour
     void GameOver()
     {
         Debug.Log("Game Over");
+        GameOverSign.SetActive(true);
+    }
+
+    public void Reset()
+    {
+        SceneManager.LoadScene(0);
     }
 }
