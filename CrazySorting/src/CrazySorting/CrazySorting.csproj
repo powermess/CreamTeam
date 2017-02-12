@@ -76,6 +76,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CharacterMover.cs" />
     <Compile Include="CharacterSpawner.cs" />
     <Compile Include="DraggableCharacterBehaviour.cs" />
     <Compile Include="Faction.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Character.cs" />
     <Compile Include="Goal.cs" />
     <Compile Include="ChangeLogBehaviour.cs" />
+    <Compile Include="UnityExtensionMethods.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

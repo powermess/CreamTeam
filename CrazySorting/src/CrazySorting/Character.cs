@@ -6,6 +6,7 @@ using UnityEngine;
 class Character : MonoBehaviour
 {
     public Faction Faction;
+    public AudioClip SelfDestructSound;
 
     public event Action<Character, Goal> OnEnteredGoal;
     public event Action<Character> OnSelfDestruct;
@@ -13,14 +14,16 @@ class Character : MonoBehaviour
     Dictionary<Collider2D, Goal> mGoals;
     Collider2D mCollider;
     IDraggableCharacter mDraggableBehaviour;
+    CharacterMover mCharacterMover;
     bool mActive = true;
-    SelfDestructBehaviour mSelfDestructor;
+    SelfDestructBehaviour mSelfDestructor;    
 
     public void Stop()
     {
         mActive = false;
         mDraggableBehaviour.DisableDragging();
         mSelfDestructor.Stop();
+        mCharacterMover.Stop();
     }
 
     public void Register(IDraggableCharacter draggable)
@@ -34,6 +37,12 @@ class Character : MonoBehaviour
         mSelfDestructor = selfDestructor;
         mSelfDestructor.SetOnSelfDestructAction(SelfDestruct);
     }
+
+    public void Register(CharacterMover characterMover)
+    {
+        mCharacterMover = characterMover;
+    }
+
 
     void Awake()
     {
@@ -65,6 +74,9 @@ class Character : MonoBehaviour
     void SelfDestruct()
     {
         if (mActive)
+        {
             OnSelfDestruct?.Invoke(this);
+            GetComponent<AudioSource>().PlayOneShot(SelfDestructSound);
+        }
     }    
 }

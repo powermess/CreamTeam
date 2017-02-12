@@ -20,6 +20,8 @@ namespace CrazySorting
         public Renderer Bounds;
         public CharacterTemplate[] CharacterTemplates;
         public float SpeedIncreaseFactor = 1.5f;
+        public float MinSpawnInterval = 0.5f;
+        public float MaxSpawnInterval = 3f;
 
         Game mGame;
         float mTimeSinceLastSpawn;
@@ -40,32 +42,30 @@ namespace CrazySorting
             if(mTimeSinceLastSpawn > mTimeToSpawnNext)
             {
                 SpawnCharacter();
-                mTimeSinceLastSpawn = 0f;
 
-                var maxTime = 3 - Time.time / 60 * SpeedIncreaseFactor;
-                Debug.Log(string.Format("maxTime: {0}", maxTime));
-                mTimeToSpawnNext = UnityEngine.Random.Range(0f, maxTime);
+                SetNewSpawnTime();
             }
+        }
+
+        void SetNewSpawnTime()
+        {
+            mTimeSinceLastSpawn = 0f;
+
+            var step = Time.timeSinceLevelLoad / 60 * SpeedIncreaseFactor;
+            var maxTime = Mathf.Max(0.7f, MaxSpawnInterval - step);
+            var minTime = Mathf.Max(0.5f, MinSpawnInterval - step);
+
+            mTimeToSpawnNext = UnityEngine.Random.Range(minTime, maxTime);
         }
 
         private void SpawnCharacter()
         {
-            var minX = Bounds.bounds.min.x + SpawnPadding;
-            var minY = Bounds.bounds.min.y + SpawnPadding;
-            var maxX = Bounds.bounds.max.x - SpawnPadding;
-            var maxY = Bounds.bounds.max.y - SpawnPadding;
-
-            var randX = UnityEngine.Random.Range(minX, maxX);
-            var randY = UnityEngine.Random.Range(minY, maxY);
-
             var randIndex = UnityEngine.Random.Range(0, CharacterTemplates.Length);
 
-            var character = Instantiate(CharacterTemplates[randIndex].GameObjectToSpawn, new Vector3(randX, randY, 0), Quaternion.identity);
+            var character = Instantiate(CharacterTemplates[randIndex].GameObjectToSpawn, Bounds.bounds.GetRandomPositionInBounds(SpawnPadding), Quaternion.identity);
             character.gameObject.SetActive(true);
 
             mGame.OnCharacterSpawned(character);
         }
-
-
     }
 }
