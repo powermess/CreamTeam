@@ -6,78 +6,34 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace Assets.src
+class Game : MonoBehaviour
 {
-    class Game : MonoBehaviour
+    private void Awake()
     {
-        List<TargetLand> mTargets;
-        public Text JerbsCounter;
-        List<Sortee> mActors;
-        public Image mWinimage;
-        public Image mLoseImage;
-        public Image mLoseImageMinority;
-        public Button RestartButton;
+        Initialize();
 
+        var characters = FindObjectsOfType<Character>().ToList();
 
-        void Awake()
+        characters.ForEach(c => c.OnEnteredGoal += HandleCharaterEnteredGoalEvent);
+    }
+
+    private void HandleCharaterEnteredGoalEvent(Character character, Goal goal)
+    {
+        character.Stop();
+
+        if(character.Faction != goal.Faction)
         {
-            mTargets = FindObjectsOfType<TargetLand>().ToList();
-            mTargets.ForEach(t => t.OnCollisionAction += OnEnterLand);
+            GameOver();
         }
+    }
 
-        void Start()
-        {
-            
-        }
+    private void Initialize()
+    {
+        Application.targetFrameRate = 60;
+    }
 
-        void OnDestroy()
-        {
-            mTargets.ForEach(t => t.OnCollisionAction -= OnEnterLand);
-        }
-
-
-        private void Win()
-        {
-            mWinimage.enabled = true;
-            End();
-        }
-
-        private void LoseAmerica()
-        {
-            mLoseImage.enabled = true;
-            End();
-        }
-
-        private void LoseMinority()
-        {
-            mLoseImageMinority.enabled = true;
-            End();
-        }
-
-        void End()
-        {
-            RestartButton.enabled = true;
-            mActors.ForEach(a => a.Stop());
-        }
-
-        void OnEnterLand(bool isMurica, Sortee sortee)
-        {
-           
-        }
-
-        void EnterMurica(Sortee sortee)
-        {
-            
-        }
-
-        void EnterMinorities(Sortee sortee)
-        {
-
-        }
-
-        public void Restart()
-        {
-            SceneManager.LoadScene(0);
-        }
+    void GameOver()
+    {
+        Debug.Log("Game Over");
     }
 }
