@@ -76,11 +76,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CharacterSpawner.cs" />
     <Compile Include="DraggableCharacterBehaviour.cs" />
     <Compile Include="Faction.cs" />
     <Compile Include="FPSDisplay.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="IDraggableCharacter.cs" />
+    <Compile Include="SelfDestructBehavioiur.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Goal.cs" />

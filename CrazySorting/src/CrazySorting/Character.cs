@@ -8,18 +8,37 @@ class Character : MonoBehaviour
     public Faction Faction;
 
     public event Action<Character, Goal> OnEnteredGoal;
+    public event Action<Character> OnSelfDestruct;
+
     Dictionary<Collider2D, Goal> mGoals;
     Collider2D mCollider;
     IDraggableCharacter mDraggableBehaviour;
+    bool mActive = true;
+    SelfDestructBehaviour mSelfDestructor;
+
+    public void Stop()
+    {
+        mActive = false;
+        mDraggableBehaviour.DisableDragging();
+        mSelfDestructor.Stop();
+    }
+
+    public void Register(IDraggableCharacter draggable)
+    {
+        mDraggableBehaviour = draggable;
+        mDraggableBehaviour.SetOnMouseUpAction(CheckIfInGoal);
+    }
+
+    public void Register(SelfDestructBehaviour selfDestructor)
+    {
+        mSelfDestructor = selfDestructor;
+        mSelfDestructor.SetOnSelfDestructAction(SelfDestruct);
+    }
 
     void Awake()
     {
         mGoals = FindObjectsOfType<Goal>().ToDictionary(k => k.GetComponent<Collider2D>(), v => v);
         mCollider = GetComponent<Collider2D>();
-    }
-
-    void OnDestroy()
-    {
     }
 
     void CheckIfInGoal()
@@ -38,19 +57,14 @@ class Character : MonoBehaviour
         return container.bounds.Contains(containee.bounds.min) && container.bounds.Contains(containee.bounds.max);
     }
 
-    private void EnterGoal(Goal goal)
+    void EnterGoal(Goal goal)
     {
         OnEnteredGoal?.Invoke(this, goal);
     }
 
-    public void Stop()
+    void SelfDestruct()
     {
-        mDraggableBehaviour.DisableDragging();
-    }
-
-    public void Register(IDraggableCharacter draggable)
-    {
-        mDraggableBehaviour = draggable;
-        mDraggableBehaviour.SetOnMouseUpAction(CheckIfInGoal);
-    }
+        if (mActive)
+            OnSelfDestruct?.Invoke(this);
+    }    
 }
