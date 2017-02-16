@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Character), typeof(BoxCollider2D))]
+[RequireComponent(typeof(Character), typeof(Collider2D))]
 class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
 {
     public float PickUpScaleFactor = 1.5f;
@@ -10,7 +10,7 @@ class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
     Vector3 mOffset;
     Vector3 mPreviousScale;
     protected Action mOnMouseUpAction;
-    Character mCharacter;
+    protected Character mCharacter;
 
 
     public void DisableDragging()
@@ -42,11 +42,27 @@ class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
     {
         Vector3 newPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, mDistToCamera);
         transform.position = Camera.main.ScreenToWorldPoint(newPosition) + mOffset;
+        transform.position = KeepPointOnScreen(transform.position);
     }
 
     public void SetOnMouseUpAction(Action onMouseUpAction)
     {
         mOnMouseUpAction = onMouseUpAction;
+    }
+
+    protected Vector2 KeepPointOnScreen(Vector2 worldSpacePoint)
+    {
+
+        var bounds = mCharacter.GetComponent<SpriteRenderer>().sprite.bounds;
+
+        var p = Camera.main.WorldToViewportPoint(worldSpacePoint);
+
+        p.x = Mathf.Clamp(p.x, 0.1f, 0.9f);
+        p.y = Mathf.Clamp(p.y, 0.05f, 0.95f);
+
+        worldSpacePoint = Camera.main.ViewportToWorldPoint(p);
+
+        return worldSpacePoint;
     }
 
     public virtual void Update()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CrazySorting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,16 +9,21 @@ using UnityEngine.UI;
 
 class Game : MonoBehaviour
 {
-
     public GameObject GameOverSign;
+    public Text ScoreText;
 
     int mScore;
+    List<Character> mCharacters = new List<Character>();
+
+    CharacterSpawner mSpawner;
 
     private void Awake()
     {
         Initialize();
 
         GameOverSign.SetActive(false);
+
+        ScoreText.text = "0";
     }
 
     private void HandleCharaterEnteredGoalEvent(Character character, Goal goal)
@@ -25,12 +31,14 @@ class Game : MonoBehaviour
         character.Stop();
         character.OnEnteredGoal -= HandleCharaterEnteredGoalEvent;
 
-        if(character.Faction != goal.Faction)
+        if (character.Faction != goal.Faction)
         {
             GameOver();
-        }else
+        }
+        else
         {
             mScore++;
+            ScoreText.text = mScore.ToString();
         }
     }
 
@@ -48,6 +56,10 @@ class Game : MonoBehaviour
     {
         GameOverSign.SetActive(true);
         GameOverSign.transform.FindChild("Score").GetComponent<Text>().text = mScore.ToString();
+
+        mCharacters.ForEach(c => c.Stop());
+
+        mSpawner.Stop();
     }
 
     public void Reset()
@@ -59,5 +71,12 @@ class Game : MonoBehaviour
     {
         character.OnEnteredGoal += HandleCharaterEnteredGoalEvent;
         character.OnSelfDestruct += HandleSelfDestructEvent;
+
+        mCharacters.Add(character);
+    }
+
+    public void Register(CharacterSpawner spawner)
+    {
+        mSpawner = spawner;
     }
 }

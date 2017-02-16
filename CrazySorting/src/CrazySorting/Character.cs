@@ -1,8 +1,10 @@
-﻿using System;
+﻿using CrazySorting.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(Collider2D))]
 class Character : MonoBehaviour
 {
     public Faction Faction;
@@ -11,12 +13,12 @@ class Character : MonoBehaviour
     public event Action<Character, Goal> OnEnteredGoal;
     public event Action<Character> OnSelfDestruct;
 
-    Dictionary<Collider2D, Goal> mGoals;
+    IEnumerable<Goal> mGoals;
     Collider2D mCollider;
     IDraggableCharacter mDraggableBehaviour;
     CharacterMover mCharacterMover;
     bool mActive = true;
-    SelfDestructBehaviour mSelfDestructor;    
+    SelfDestructBehaviour mSelfDestructor;
 
     public void Stop()
     {
@@ -46,24 +48,17 @@ class Character : MonoBehaviour
 
     void Awake()
     {
-        mGoals = FindObjectsOfType<Goal>().ToDictionary(k => k.GetComponent<Collider2D>(), v => v);
+        mGoals = FindObjectsOfType<Goal>();
         mCollider = GetComponent<Collider2D>();
     }
 
     void CheckIfInGoal()
     {
-        foreach (var goal in mGoals)
+        foreach (var g in mGoals)
         {
-            if (IsContainedInCollider(mCollider, goal.Key))
-            {
-                EnterGoal(goal.Value);
-            }
-        }
-    }
-
-    bool IsContainedInCollider(Collider2D containee, Collider2D container)
-    {
-        return container.bounds.Contains(containee.bounds.min) && container.bounds.Contains(containee.bounds.max);
+            if (g.IsCharacterInGoal(this))
+                EnterGoal(g);
+        };
     }
 
     void EnterGoal(Goal goal)
@@ -73,10 +68,10 @@ class Character : MonoBehaviour
 
     void SelfDestruct()
     {
-        if (mActive)
-        {
-            OnSelfDestruct?.Invoke(this);
-            GetComponent<AudioSource>().PlayOneShot(SelfDestructSound);
-        }
-    }    
+        if (!mActive)
+            return;
+
+        OnSelfDestruct?.Invoke(this);
+        GetComponent<AudioSource>().PlayOneShot(SelfDestructSound);
+    }
 }

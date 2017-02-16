@@ -21,7 +21,7 @@ namespace CrazySorting
         public CharacterTemplate[] CharacterTemplates;
         public float SpeedIncreaseFactor = 1.5f;
         public float MinSpawnInterval = 0.5f;
-        public float MaxSpawnInterval = 3f;
+        public float MaxSpawnInterval = 1.5f;
 
         Game mGame;
         float mTimeSinceLastSpawn;
@@ -32,6 +32,8 @@ namespace CrazySorting
         private void Awake()
         {
             mGame = GetComponent<Game>();
+            mGame.Register(this);
+
             mRandom = new UnityEngine.Random();
         }
 
@@ -52,10 +54,15 @@ namespace CrazySorting
             mTimeSinceLastSpawn = 0f;
 
             var step = Time.timeSinceLevelLoad / 60 * SpeedIncreaseFactor;
-            var maxTime = Mathf.Max(0.7f, MaxSpawnInterval - step);
-            var minTime = Mathf.Max(0.5f, MinSpawnInterval - step);
+            var maxTime = Mathf.Max(0.8f, MaxSpawnInterval - step);
+            var minTime = Mathf.Max(0.2f, MinSpawnInterval - step);
 
             mTimeToSpawnNext = UnityEngine.Random.Range(minTime, maxTime);
+        }
+
+        internal void Stop()
+        {
+            enabled = false;
         }
 
         private void SpawnCharacter()

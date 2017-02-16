@@ -21,6 +21,11 @@ class CharacterMover : MonoBehaviour
         AcquireNewTarget();
     }
 
+    void OnMouseUp()
+    {
+        AcquireNewTarget();
+    }
+
     void Update()
     {
         var step = Speed / 100f * (1 + Time.timeSinceLevelLoad / 100f);

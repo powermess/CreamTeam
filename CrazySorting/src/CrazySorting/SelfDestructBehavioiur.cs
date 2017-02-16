@@ -29,7 +29,10 @@ class SelfDestructBehaviour : MonoBehaviour
         }
 
         if (mTimer > SelfDestructTimer)
+        {
             mSelfDestructAction?.Invoke();
+            Stop();
+        }
     }
 
     internal void Stop()
