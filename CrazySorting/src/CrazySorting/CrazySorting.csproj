@@ -88,6 +88,7 @@
     <Compile Include="Character.cs" />
     <Compile Include="Goal.cs" />
     <Compile Include="ChangeLogBehaviour.cs" />
+    <Compile Include="ThrowableCharacterBehaviour.cs" />
     <Compile Include="UnityExtensionMethods.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

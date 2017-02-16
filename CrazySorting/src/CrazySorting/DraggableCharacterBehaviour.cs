@@ -9,7 +9,7 @@ class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
     float mDistToCamera;
     Vector3 mOffset;
     Vector3 mPreviousScale;
-    private Action mOnMouseUpAction;
+    protected Action mOnMouseUpAction;
     Character mCharacter;
 
 
@@ -18,13 +18,13 @@ class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
         GetComponent<Collider2D>().enabled = false;
     }
 
-    void Awake()
+    public virtual void Awake()
     {
         mCharacter = GetComponent<Character>();
         mCharacter.Register(this);
     }
 
-    void OnMouseDown()
+    public virtual void OnMouseDown()
     {
         mPreviousScale = transform.localScale;
         transform.localScale *= PickUpScaleFactor;
@@ -32,13 +32,13 @@ class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
         mOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, mDistToCamera));
     }
 
-    void OnMouseUp()
+    public virtual void OnMouseUp()
     {
         transform.localScale = mPreviousScale;
         mOnMouseUpAction?.Invoke();
     }
 
-    void OnMouseDrag()
+    public virtual void OnMouseDrag()
     {
         Vector3 newPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, mDistToCamera);
         transform.position = Camera.main.ScreenToWorldPoint(newPosition) + mOffset;
@@ -47,5 +47,10 @@ class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
     public void SetOnMouseUpAction(Action onMouseUpAction)
     {
         mOnMouseUpAction = onMouseUpAction;
+    }
+
+    public virtual void Update()
+    {
+
     }
 }
