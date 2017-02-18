@@ -33,7 +33,16 @@ class CharacterMover : MonoBehaviour
         if (Vector3.Distance(transform.position, mTargetPosition) < step)
             AcquireNewTarget();
 
-        transform.position = Vector3.MoveTowards(transform.position, mTargetPosition, step);
+        GetComponent<Rigidbody2D>().MovePosition(Vector3.MoveTowards(transform.position, mTargetPosition, step));
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //Debug.DrawLine(transform.position, collision.relativeVelocity.normalized * 100f, Color.red, 3f);
+
+        var v = collision.relativeVelocity.normalized * -1f;
+        v = new Vector2(Mathf.Sign(v.x), Mathf.Sign(v.y));
+        AcquireNewTarget();
     }
 
     Vector2 GetRandomTarget(Bounds bounds)
@@ -43,13 +52,19 @@ class CharacterMover : MonoBehaviour
 
     void AcquireNewTarget()
     {
+        AcquireNewTarget(new Vector2(1, 1));
+    }
+
+    void AcquireNewTarget(Vector2 bias)
+    {
         mStartPosition = transform.position;
-        mTargetPosition = GetRandomTarget(mBounds);
+        mTargetPosition = Vector2.Scale(GetRandomTarget(mBounds), bias);
     }
     
     internal void Stop()
     {
         enabled = false;
+        GetComponent<Rigidbody2D>().simulated = false;
     }
 }
 

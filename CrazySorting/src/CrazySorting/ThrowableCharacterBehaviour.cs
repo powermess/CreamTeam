@@ -32,6 +32,7 @@ namespace CrazySorting
         {
             mLastPosition = transform.position;
             mCurrentPosition = transform.position;
+            GetComponent<BoxCollider2D>().enabled = false;
         }
 
         public override void OnMouseDrag()
@@ -51,9 +52,12 @@ namespace CrazySorting
             "distance pos, mlastpos: {0}".Log(Vector2.Distance(transform.position, mLastPosition));
 
             if (Vector2.Distance(transform.position, mLastPosition) < 0.1f || goals.Any(g => g.IsCharacterInGoal(mCharacter)))
+            {
+                GetComponent<BoxCollider2D>().enabled = true;
                 return;
+            }
 
-            if (hit.collider != null && Vector2.Distance(hit.point, transform.position) < ThrowDistance)
+            if (hit.collider != null)
             {
                 mThrowTargetPosition = hit.point + new Vector2(dirVector.x, dirVector.y).normalized * 1.5f;
             }
@@ -65,6 +69,7 @@ namespace CrazySorting
             mThrowTargetPosition = KeepPointOnScreen(mThrowTargetPosition.Value);
 
             "new throwTargetPosition: {0}".Log(mThrowTargetPosition);
+
         }
 
         public override void Update()
