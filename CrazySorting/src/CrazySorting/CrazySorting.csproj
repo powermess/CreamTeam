@@ -82,6 +82,7 @@
     <Compile Include="Faction.cs" />
     <Compile Include="FPSDisplay.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GoalMover.cs" />
     <Compile Include="IDraggableCharacter.cs" />
     <Compile Include="SelfDestructBehavioiur.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

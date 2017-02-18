@@ -84,7 +84,7 @@ namespace CrazySorting
         private void SetRandomPosition(Character character)
         {
 
-            character.transform.position = Bounds.bounds.GetRandomPositionInBounds(Bounds.bounds.size.x / 2f);
+            character.transform.position = Bounds.bounds.GetRandomPositionInBounds(character.GetComponent<Renderer>().bounds.size.x / 2f);
 
             if (mGoals.Any(g => g.IsCharacterInGoal(character)))
                 SetRandomPosition(character);

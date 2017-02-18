@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(BoxCollider2D))]
 class Character : MonoBehaviour
 {
     public Faction Faction;
@@ -49,7 +49,7 @@ class Character : MonoBehaviour
     void Awake()
     {
         mGoals = FindObjectsOfType<Goal>();
-        mCollider = GetComponent<Collider2D>();
+        mCollider = GetComponent<BoxCollider2D>();
     }
 
     void CheckIfInGoal()

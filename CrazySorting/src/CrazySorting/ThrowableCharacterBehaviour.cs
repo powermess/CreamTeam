@@ -30,6 +30,8 @@ namespace CrazySorting
 
         public override void OnMouseDown()
         {
+            base.OnMouseDown();
+
             mLastPosition = transform.position;
             mCurrentPosition = transform.position;
             GetComponent<BoxCollider2D>().enabled = false;
@@ -37,26 +39,29 @@ namespace CrazySorting
 
         public override void OnMouseDrag()
         {
+            base.OnMouseDrag();
+
             mLastPosition = mCurrentPosition;
             mCurrentPosition = transform.position;
         }
 
-        public override void OnMouseUp()
+        protected override void OnMouseUpInternal()
         {
+            base.OnMouseUpInternal();
+
             var hit = Physics2D.Raycast(transform.position, transform.position - mLastPosition, 10000, 1 << LayerMask.NameToLayer(GoalLayerName));
 
             var dirVector = transform.position - mLastPosition;
 
             var goals = FindObjectsOfType<Goal>();
 
-            "distance pos, mlastpos: {0}".Log(Vector2.Distance(transform.position, mLastPosition));
 
             if (Vector2.Distance(transform.position, mLastPosition) < 0.1f || goals.Any(g => g.IsCharacterInGoal(mCharacter)))
             {
                 GetComponent<BoxCollider2D>().enabled = true;
                 return;
             }
-
+            
             if (hit.collider != null)
             {
                 mThrowTargetPosition = hit.point + new Vector2(dirVector.x, dirVector.y).normalized * 1.5f;
@@ -67,9 +72,6 @@ namespace CrazySorting
             }
 
             mThrowTargetPosition = KeepPointOnScreen(mThrowTargetPosition.Value);
-
-            "new throwTargetPosition: {0}".Log(mThrowTargetPosition);
-
         }
 
         public override void Update()

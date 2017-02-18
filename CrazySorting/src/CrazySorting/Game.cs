@@ -30,6 +30,7 @@ class Game : MonoBehaviour
     {
         character.Stop();
         character.OnEnteredGoal -= HandleCharaterEnteredGoalEvent;
+        character.transform.parent = goal.transform;
 
         if (character.Faction != goal.Faction)
         {

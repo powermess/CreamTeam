@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Character), typeof(Collider2D))]
@@ -11,7 +12,7 @@ class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
     Vector3 mPreviousScale;
     protected Action mOnMouseUpAction;
     protected Character mCharacter;
-
+    IEnumerable<Goal> mGoals;
 
     public void DisableDragging()
     {
@@ -22,20 +23,43 @@ class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
     {
         mCharacter = GetComponent<Character>();
         mCharacter.Register(this);
+
+        mGoals = FindObjectsOfType<Goal>();
     }
 
     public virtual void OnMouseDown()
     {
+        GetComponent<BoxCollider2D>().enabled = false;
+
         mPreviousScale = transform.localScale;
         transform.localScale *= PickUpScaleFactor;
         mDistToCamera = Vector3.Distance(Camera.main.transform.position, transform.position);
         mOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, mDistToCamera));
     }
 
-    public virtual void OnMouseUp()
+    void OnMouseUp()
+    {
+        GetComponent<BoxCollider2D>().enabled = true;
+
+        OnMouseUpInternal();
+
+    }
+
+    protected virtual void OnMouseUpInternal()
     {
         transform.localScale = mPreviousScale;
+
+        foreach(var goal in mGoals)
+        {
+            if (goal.IsCharacterNearGoal(mCharacter))
+            {
+                goal.MoveCharacterIntoGoal(mCharacter);
+                break;
+            }
+        }
+
         mOnMouseUpAction?.Invoke();
+
     }
 
     public virtual void OnMouseDrag()
