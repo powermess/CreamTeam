@@ -17,11 +17,6 @@ class SceneExporter : Editor
         }
 
         var fileName = Application.dataPath + "/Resources/scene_names.txt";
-        if (!File.Exists(fileName))
-        {
-            var file = File.Create(fileName);
-            file.Close();
-        }
         File.WriteAllLines(fileName, scenes.ToArray());
     }
 }
