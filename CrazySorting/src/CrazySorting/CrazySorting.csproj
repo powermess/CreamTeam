@@ -70,16 +70,11 @@
       <HintPath>..\..\libs\UnityAssemblies\UnityEngine.VR.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEditor">
-      <HintPath>..\..\libs\UnityAssemblies\UnityEditor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CharacterMover.cs" />
     <Compile Include="CharacterSpawner.cs" />
     <Compile Include="DraggableCharacterBehaviour.cs" />
-    <Compile Include="Editor\SceneExporter.cs" />
     <Compile Include="Faction.cs" />
     <Compile Include="FPSDisplay.cs" />
     <Compile Include="Game.cs" />

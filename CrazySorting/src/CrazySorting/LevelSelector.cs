@@ -27,10 +27,13 @@ namespace CrazySorting
             var height = Screen.height / 10f;
             var xPadding = 5;
             var yPadding = 5;
+            var guiStyle = new GUIStyle("button");
+            guiStyle.fontSize = 30;
 
             foreach(var scene in mScenes)
             {
-                if (GUI.Button(new Rect(new Vector2(xPadding, yPos + yPadding), new Vector2(Screen.width - 2 * xPadding, height)), scene))
+
+                if (GUI.Button(new Rect(new Vector2(xPadding, yPos + yPadding), new Vector2(Screen.width - 2 * xPadding, height)), scene, guiStyle))
                 {
                     SceneManager.LoadScene(scene);
                 }
