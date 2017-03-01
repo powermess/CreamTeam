@@ -1,6 +1,7 @@
 ﻿enum Faction
 {
     GREEN,
-    BLUE
+    BLUE,
+    REDVAGINA
 }
 
