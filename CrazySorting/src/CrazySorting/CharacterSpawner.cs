@@ -13,7 +13,6 @@ namespace CrazySorting
         public int Difficultylevel;
     }
 
-    [RequireComponent(typeof(Game))]
     class CharacterSpawner : MonoBehaviour
     {
         public float SpawnPadding;
@@ -29,22 +28,23 @@ namespace CrazySorting
         float mTimeToSpawnNext;
         UnityEngine.Random mRandom;
         IEnumerable<Goal> mGoals;
+        float mElapsedTime;
 
+        public void RegisterGame(Game game)
+        {
+            mGame = game;
+        }
 
         private void Awake()
         {
-            mGame = GetComponent<Game>();
             mGoals = FindObjectsOfType<Goal>();
-
-            mGame.Register(this);
-
             mRandom = new UnityEngine.Random();
-            
         }
 
         private void Update()
         {
             mTimeSinceLastSpawn += Time.deltaTime;
+            mElapsedTime += Time.deltaTime;
 
             if(mTimeSinceLastSpawn > mTimeToSpawnNext)
             {
@@ -61,7 +61,7 @@ namespace CrazySorting
         {
             mTimeSinceLastSpawn = 0f;
 
-            var step = Time.timeSinceLevelLoad / 60 * SpeedIncreaseFactor;
+            var step = mElapsedTime / 60 * SpeedIncreaseFactor;
             var maxTime = Mathf.Max(0.2f, MaxSpawnInterval - step);
             var minTime = Mathf.Max(0.1f, MinSpawnInterval - step);
 
@@ -87,7 +87,6 @@ namespace CrazySorting
 
         private void SetRandomPosition(Character character)
         {
-
             character.transform.position = Bounds.bounds.GetRandomPositionInBounds(character.GetComponent<Renderer>().bounds.size.x / 2f);
 
             if (mGoals.Any(g => g.IsCharacterInGoal(character)))

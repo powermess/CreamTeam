@@ -1,4 +1,5 @@
 ﻿using CrazySorting;
+using CrazySorting.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,13 @@ class Game : MonoBehaviour
 {
     public GameObject GameOverSign;
     public Text ScoreText;
+    public Stage[] Stages;
 
     int mScore;
-    List<Character> mCharacters = new List<Character>();
+    List<Character> mActiveCharacters = new List<Character>();
+    int mCurrentStageIndex;
+    float mCurrentStageDuration;
+    bool mTransitioning;
 
     CharacterSpawner mSpawner;
 
@@ -24,6 +29,66 @@ class Game : MonoBehaviour
         GameOverSign.SetActive(false);
 
         ScoreText.text = "0";
+
+        Stages.Apply(s => s.gameObject.SetActive(false));
+    }
+
+    private void Start()
+    {
+        StartStage(mCurrentStageIndex);
+    }
+
+    void Update()
+    {
+        mCurrentStageDuration += Time.deltaTime;
+
+        CheckEndCondition(mCurrentStageDuration);
+    }
+
+    private void CheckEndCondition(float duration)
+    {
+        if(!mTransitioning && duration > Stages[mCurrentStageIndex].Duration)
+        {
+            StartTransition();
+        }else if (mTransitioning && !mActiveCharacters.Any())
+        {
+            StartNextStage();
+        }
+    }
+
+    private void StartTransition()
+    {
+        "Start transition".Log();
+        mTransitioning = true;
+        Stages[mCurrentStageIndex].Spawner.Stop();
+        mSpawner.gameObject.SetActive(false);
+    }
+
+    private void StartNextStage()
+    {
+        "Start next stage".Log();
+        mCurrentStageIndex++;
+
+        if (mCurrentStageIndex >= Stages.Length) //should never happen in an endless game
+        {
+            GameOver();
+            return;
+        }
+
+        Reset();
+
+        StartStage(mCurrentStageIndex);
+    }
+
+    private void StartStage(int index)
+    {
+        "Stages count: {0}".Log(Stages.Length);
+        var currentStage = Stages[index];
+        "currentStage null: {0}".Log(currentStage == null);
+        mSpawner = currentStage.Spawner;
+        "spawner null: {0}".Log(mSpawner == null);
+        mSpawner.gameObject.SetActive(true);
+        mSpawner.RegisterGame(this);
     }
 
     private void HandleCharaterEnteredGoalEvent(Character character, Goal goal)
@@ -41,6 +106,8 @@ class Game : MonoBehaviour
             mScore++;
             ScoreText.text = mScore.ToString();
         }
+
+        mActiveCharacters.Remove(character);
     }
 
     void HandleSelfDestructEvent(Character character)
@@ -55,15 +122,24 @@ class Game : MonoBehaviour
 
     void GameOver()
     {
+        enabled = false;
         GameOverSign.SetActive(true);
         GameOverSign.transform.FindChild("Score").GetComponent<Text>().text = mScore.ToString();
 
-        mCharacters.ForEach(c => c.Stop());
+        mActiveCharacters.ForEach(c => c.Stop());
 
         mSpawner.Stop();
+        mTransitioning = false;
     }
 
-    public void Reset()
+    void Reset()
+    {
+        mActiveCharacters.Clear();
+        mCurrentStageDuration = 0;
+        mTransitioning = false;
+    }
+
+    public void LoadMainMenu()
     {
         SceneManager.LoadScene(0);
     }
@@ -73,11 +149,6 @@ class Game : MonoBehaviour
         character.OnEnteredGoal += HandleCharaterEnteredGoalEvent;
         character.OnSelfDestruct += HandleSelfDestructEvent;
 
-        mCharacters.Add(character);
-    }
-
-    public void Register(CharacterSpawner spawner)
-    {
-        mSpawner = spawner;
+        mActiveCharacters.Add(character);
     }
 }
