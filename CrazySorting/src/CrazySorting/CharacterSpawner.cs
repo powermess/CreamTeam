@@ -10,18 +10,19 @@ namespace CrazySorting
     class CharacterTemplate
     {
         public Character GameObjectToSpawn;
-        public int Difficultylevel;
+        public int DifficultyLevel;
     }
 
     class CharacterSpawner : MonoBehaviour
     {
         public float SpawnPadding;
-        public Renderer Bounds;
         public CharacterTemplate[] CharacterTemplates;
         public float SpeedIncreaseFactor = 1.5f;
         public float MinSpawnInterval = 0.5f;
         public float MaxSpawnInterval = 1.5f;
         public int SimulataneousSpawns = 1;
+
+        public SpawnPoint[] SpawnPoints;
 
         Game mGame;
         float mTimeSinceLastSpawn;
@@ -87,7 +88,15 @@ namespace CrazySorting
 
         private void SetRandomPosition(Character character)
         {
-            character.transform.position = Bounds.bounds.GetRandomPositionInBounds(character.GetComponent<Renderer>().bounds.size.x / 2f);
+            if(SpawnPoints == null || SpawnPoints.Length == 0)
+            {
+                Debug.LogError("Cannot Spawn without at least one spawnpoint!");
+                return;
+            }
+
+            var randomSpawnPoint = SpawnPoints[UnityEngine.Random.Range(0, SpawnPoints.Length)];
+
+            character.transform.position = randomSpawnPoint.Bounds.GetRandomPositionInBounds(character.GetComponent<Renderer>().bounds.size.x / 2f);
 
             if (mGoals.Any(g => g.IsCharacterInGoal(character)))
                 SetRandomPosition(character);

@@ -86,7 +86,9 @@
     <Compile Include="Character.cs" />
     <Compile Include="Goal.cs" />
     <Compile Include="ChangeLogBehaviour.cs" />
+    <Compile Include="SpawnPoint.cs" />
     <Compile Include="Stage.cs" />
+    <Compile Include="SlingshotCharacterBehaviour.cs" />
     <Compile Include="ThrowableCharacterBehaviour.cs" />
     <Compile Include="UnityExtensionMethods.cs" />
     <Compile Include="Utility\MethodExtensions.cs" />
