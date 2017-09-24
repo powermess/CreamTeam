@@ -76,7 +76,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BootStrapper.cs" />
+    <Compile Include="CharacterEffects\ACharacterEffect.cs" />
     <Compile Include="CharacterEffects\IceBlockEffect.cs" />
+    <Compile Include="CharacterEffects\InputForwarder.cs" />
     <Compile Include="CharacterMover.cs" />
     <Compile Include="CharacterSpawner.cs" />
     <Compile Include="DraggableCharacterBehaviour.cs" />

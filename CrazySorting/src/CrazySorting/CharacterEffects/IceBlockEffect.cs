@@ -1,16 +1,7 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CrazySorting.CharacterEffects
 {
-    [RequireComponent(typeof(Character))]
-    abstract class ACharacterEffect : MonoBehaviour
-    {
-        protected Character Character { get { return mCharacter ?? (mCharacter = GetComponent<Character>()); }}
-
-        private Character mCharacter;
-    }
-    
     class IceBlockEffect : ACharacterEffect
     {
         public int TouchesToBreak = 3;
@@ -49,16 +40,6 @@ namespace CrazySorting.CharacterEffects
             
             Destroy(mIceBlockPrefab);
             Destroy(this);
-        }
-    }
-
-    class InputForwarder : MonoBehaviour
-    {
-        public event Action OnMouseUpEvent;
-        
-        void OnMouseUp()
-        {
-            OnMouseUpEvent?.Invoke();
         }
     }
 }
