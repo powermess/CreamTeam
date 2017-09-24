@@ -2,23 +2,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CrazySorting.Enraging;
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider2D))]
 class Character : MonoBehaviour
 {
     public Faction Faction;
     public AudioClip SelfDestructSound;
 
     public event Action<Character, Goal> OnEnteredGoal;
-    public event Action<Character> OnSelfDestruct;
 
     IEnumerable<Goal> mGoals;
-    Collider2D mCollider;
     IDraggableCharacter mDraggableBehaviour;
     CharacterMover mCharacterMover;
     bool mActive = true;
-    SelfDestructBehaviour mSelfDestructor;
+    EnrageConditionBehaviour mSelfDestructor;
+    IEnrageEffect mEnrageEffect;
 
     public void Stop()
     {
@@ -34,7 +33,7 @@ class Character : MonoBehaviour
         mDraggableBehaviour.SetOnMouseUpAction(CheckIfInGoal);
     }
 
-    public void Register(SelfDestructBehaviour selfDestructor)
+    public void Register(EnrageConditionBehaviour selfDestructor)
     {
         mSelfDestructor = selfDestructor;
         mSelfDestructor.SetOnSelfDestructAction(SelfDestruct);
@@ -45,19 +44,23 @@ class Character : MonoBehaviour
         mCharacterMover = characterMover;
     }
 
+    public void Register(IEnrageEffect enrageEffect)
+    {
+        mEnrageEffect = enrageEffect;
+    }
+
 
     void Awake()
     {
         mGoals = FindObjectsOfType<Goal>();
-        mCollider = GetComponent<BoxCollider2D>();
     }
 
     void CheckIfInGoal()
     {
-        foreach (var g in mGoals)
+        foreach (var goal in mGoals)
         {
-            if (g.IsCharacterInGoal(this))
-                EnterGoal(g);
+            if (goal.IsCharacterInGoal(this))
+                EnterGoal(goal);
         };
     }
 
@@ -70,8 +73,9 @@ class Character : MonoBehaviour
     {
         if (!mActive)
             return;
-
-        OnSelfDestruct?.Invoke(this);
+        
+        mEnrageEffect?.Enrage();
+        
         GetComponent<AudioSource>().PlayOneShot(SelfDestructSound);
     }
 }

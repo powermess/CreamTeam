@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-class Game : MonoBehaviour
+class Game : MonoBehaviour, IGame
 {
     public GameObject GameOverSign;
     public Text ScoreText;
@@ -110,17 +110,12 @@ class Game : MonoBehaviour
         mActiveCharacters.Remove(character);
     }
 
-    void HandleSelfDestructEvent(Character character)
-    {
-        GameOver();
-    }
-
-    private void Initialize()
+    void Initialize()
     {
         Application.targetFrameRate = 60;
     }
 
-    void GameOver()
+    public void GameOver()
     {
         enabled = false;
         GameOverSign.SetActive(true);
@@ -147,7 +142,6 @@ class Game : MonoBehaviour
     public void OnCharacterSpawned(Character character)
     {
         character.OnEnteredGoal += HandleCharaterEnteredGoalEvent;
-        character.OnSelfDestruct += HandleSelfDestructEvent;
 
         mActiveCharacters.Add(character);
     }

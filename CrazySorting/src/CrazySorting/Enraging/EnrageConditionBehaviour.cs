@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Character))]
-class SelfDestructBehaviour : MonoBehaviour
+class EnrageConditionBehaviour : MonoBehaviour
 {
     public float SelfDestructTimer = 5;
     public float EnrageTimer = 3;

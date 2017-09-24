@@ -88,12 +88,6 @@ namespace CrazySorting
 
         private void SetRandomPosition(Character character)
         {
-            if(SpawnPoints == null || SpawnPoints.Length == 0)
-            {
-                Debug.LogError("Cannot Spawn without at least one spawnpoint!");
-                return;
-            }
-
             var randomSpawnPoint = SpawnPoints[UnityEngine.Random.Range(0, SpawnPoints.Length)];
 
             character.transform.position = randomSpawnPoint.Bounds.GetRandomPositionInBounds(character.GetComponent<Renderer>().bounds.size.x / 2f);
