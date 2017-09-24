@@ -14,7 +14,7 @@ namespace CrazySorting.CharacterEffects
             var prefab = Resources.Load<GameObject>("iceblock");
             mIceBlockPrefab = Instantiate(prefab);
             mIceBlockPrefab.transform.position = transform.position;
-            transform.parent = mIceBlockPrefab.transform.parent;
+            transform.parent = mIceBlockPrefab.transform;
             
             var inputForwarder = mIceBlockPrefab.AddComponent<InputForwarder>();
             inputForwarder.OnMouseUpEvent += HandleMouseUpEvent;

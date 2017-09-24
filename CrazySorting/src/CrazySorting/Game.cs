@@ -145,4 +145,11 @@ class Game : MonoBehaviour, IGame
 
         mActiveCharacters.Add(character);
     }
+
+    public void OnCharacterDespawned(Character character)
+    {
+        character.OnEnteredGoal -= HandleCharaterEnteredGoalEvent;
+        
+        mActiveCharacters.Remove(character);
+    }
 }

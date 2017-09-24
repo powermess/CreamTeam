@@ -46,7 +46,7 @@ class EnrageConditionBehaviour : MonoBehaviour
         gameObject.GetComponent<Renderer>().material.color = color;
     }
 
-    internal void SetOnSelfDestructAction(Action selfDestruct)
+    internal void SetEnrageAction(Action selfDestruct)
     {
         mSelfDestructAction = selfDestruct;
     }

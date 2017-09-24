@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using CrazySorting.Enraging;
 using UnityEngine;
 
@@ -15,13 +14,15 @@ class Character : MonoBehaviour
     IDraggableCharacter mDraggableBehaviour;
     CharacterMover mCharacterMover;
     bool mActive = true;
-    EnrageConditionBehaviour mSelfDestructor;
+    EnrageConditionBehaviour mEnrageCondition;
     IEnrageEffect mEnrageEffect;
+
+    public bool Active => mActive;
 
     public void Stop()
     {
         mActive = false;
-        mSelfDestructor.Stop();
+        mEnrageCondition.Stop();
         Disable();
     }
 
@@ -33,6 +34,9 @@ class Character : MonoBehaviour
 
     public void Enable()
     {
+        if (!mActive)
+            return;
+        
         mDraggableBehaviour.EnableDragging();
         mCharacterMover.EnableMovement(true);
     }
@@ -45,8 +49,8 @@ class Character : MonoBehaviour
 
     public void Register(EnrageConditionBehaviour selfDestructor)
     {
-        mSelfDestructor = selfDestructor;
-        mSelfDestructor.SetOnSelfDestructAction(SelfDestruct);
+        mEnrageCondition = selfDestructor;
+        mEnrageCondition.SetEnrageAction(Enrage);
     }
 
     public void Register(CharacterMover characterMover)
@@ -58,7 +62,6 @@ class Character : MonoBehaviour
     {
         mEnrageEffect = enrageEffect;
     }
-
 
     void Awake()
     {
@@ -79,7 +82,7 @@ class Character : MonoBehaviour
         OnEnteredGoal?.Invoke(this, goal);
     }
 
-    void SelfDestruct()
+    void Enrage()
     {
         if (!mActive)
             return;
