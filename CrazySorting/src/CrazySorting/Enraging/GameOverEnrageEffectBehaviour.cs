@@ -41,8 +41,7 @@ namespace CrazySorting.Enraging
             characters = characters.Where(c => Vector3.Distance(c.transform.position, transform.position) < EffectRadius);
             characters.Apply(c => c.gameObject.AddComponent<IceBlockEffect>());
             
-            //transform.root.gameObject.SetActive(false);
-            Destroy(transform.root.gameObject);
+            transform.root.gameObject.SetActive(false);
         }
     }
 }
