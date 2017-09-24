@@ -1,7 +1,6 @@
-﻿using CrazySorting.Utility;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Security.Cryptography;
 using CrazySorting.Enraging;
 using UnityEngine;
 
@@ -22,9 +21,20 @@ class Character : MonoBehaviour
     public void Stop()
     {
         mActive = false;
-        mDraggableBehaviour.DisableDragging();
         mSelfDestructor.Stop();
-        mCharacterMover.Stop();
+        Disable();
+    }
+
+    public void Disable()
+    {
+        mDraggableBehaviour.DisableDragging();
+        mCharacterMover.EnableMovement(false);
+    }
+
+    public void Enable()
+    {
+        mDraggableBehaviour.EnableDragging();
+        mCharacterMover.EnableMovement(true);
     }
 
     public void Register(IDraggableCharacter draggable)

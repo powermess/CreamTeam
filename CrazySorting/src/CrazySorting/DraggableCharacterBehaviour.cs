@@ -16,7 +16,14 @@ class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
 
     public void DisableDragging()
     {
-        GetComponent<Collider2D>().enabled = false;
+        GetComponent<BoxCollider2D>().enabled = false;
+        GetComponent<CircleCollider2D>().enabled = false;
+    }
+
+    public void EnableDragging()
+    {
+        GetComponent<BoxCollider2D>().enabled = true;
+        GetComponent<CircleCollider2D>().enabled = false;
     }
 
     public virtual void Awake()

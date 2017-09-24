@@ -11,24 +11,4 @@ namespace CrazySorting.Enraging
         }
         public abstract void Enrage();
     }
-    
-    class GameOverEnrageEffectBehaviour : EnrageEffectBehaviour
-    {
-        [HideInInspector] [Dependency] public Game Game;
-
-        void Start()
-        {
-            this.Inject();
-        }
-        
-        public override void Enrage()
-        {
-            Game.GameOver();
-        }
-    }
-
-    public interface IEnrageEffect
-    {
-        void Enrage();
-    }
 }

@@ -6,7 +6,6 @@ class CharacterMover : MonoBehaviour
     public float Speed = 0.1f;
     public float TargetPadding = 0.5f;
 
-    Vector3 mStartPosition;
     Vector3 mTargetPosition;
     Bounds mBounds;
 
@@ -57,14 +56,14 @@ class CharacterMover : MonoBehaviour
 
     void AcquireNewTarget(Vector2 bias)
     {
-        mStartPosition = transform.position;
         mTargetPosition = Vector2.Scale(GetRandomTarget(mBounds), bias);
     }
     
-    internal void Stop()
+    internal void EnableMovement(bool enabled)
     {
-        enabled = false;
-        GetComponent<Rigidbody2D>().simulated = false;
+        this.enabled = enabled;
+        GetComponent<Rigidbody2D>().simulated = enabled;
     }
+    
 }
 

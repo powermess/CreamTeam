@@ -76,10 +76,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BootStrapper.cs" />
+    <Compile Include="CharacterEffects\IceBlockEffect.cs" />
     <Compile Include="CharacterMover.cs" />
     <Compile Include="CharacterSpawner.cs" />
     <Compile Include="DraggableCharacterBehaviour.cs" />
     <Compile Include="Enraging\EnrageEffectBehaviour.cs" />
+    <Compile Include="Enraging\GameOverEnrageEffectBehaviour.cs" />
+    <Compile Include="Enraging\IEnrageEffect.cs" />
     <Compile Include="Faction.cs" />
     <Compile Include="FPSDisplay.cs" />
     <Compile Include="Game.cs" />

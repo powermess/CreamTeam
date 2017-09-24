@@ -6,5 +6,6 @@ using System.Text;
 interface IDraggableCharacter
 {
     void DisableDragging();
+    void EnableDragging();
     void SetOnMouseUpAction(Action checkIfInGoal);
 }
