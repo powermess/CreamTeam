@@ -15,12 +15,14 @@ class Game : MonoBehaviour, IGame
     public Stage[] Stages;
 
     int mScore;
-    List<Character> mActiveCharacters = new List<Character>();
+    readonly List<Character> mActiveCharacters = new List<Character>();
     int mCurrentStageIndex;
     float mCurrentStageDuration;
     bool mTransitioning;
 
     CharacterSpawner mSpawner;
+    
+    public List<Character> ActiveCharacters => mActiveCharacters;
 
     private void Awake()
     {

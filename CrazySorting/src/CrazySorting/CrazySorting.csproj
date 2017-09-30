@@ -84,6 +84,7 @@
     <Compile Include="DraggableCharacterBehaviour.cs" />
     <Compile Include="Enraging\EnrageEffectBehaviour.cs" />
     <Compile Include="Enraging\GameOverEnrageEffectBehaviour.cs" />
+    <Compile Include="Enraging\IceBlockAreaEnrageEffectBehaviour.cs" />
     <Compile Include="Enraging\IEnrageEffect.cs" />
     <Compile Include="Faction.cs" />
     <Compile Include="FPSDisplay.cs" />
