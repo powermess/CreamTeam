@@ -27,7 +27,6 @@ namespace CrazySorting
         Game mGame;
         float mTimeSinceLastSpawn;
         float mTimeToSpawnNext;
-        UnityEngine.Random mRandom;
         IEnumerable<Goal> mGoals;
         float mElapsedTime;
 
@@ -39,7 +38,6 @@ namespace CrazySorting
         private void Awake()
         {
             mGoals = FindObjectsOfType<Goal>();
-            mRandom = new UnityEngine.Random();
         }
 
         private void Update()

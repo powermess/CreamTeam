@@ -1,31 +1,43 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace CrazySorting.CharacterEffects
 {
     class IceBlockEffect : ACharacterEffect
     {
-        public int TouchesToBreak = 3;
+        public int TapsToBreak = 1;
+        public GameObject EffectPrefab;
+        public bool Frozen = false;
 
         GameObject mIceBlockPrefab;
         int touchCnt;
         
         void Awake()
         {
-            var prefab = Resources.Load<GameObject>("iceblock");
-            mIceBlockPrefab = Instantiate(prefab);
-            mIceBlockPrefab.transform.position = transform.position;
-            transform.parent = mIceBlockPrefab.transform;
-            
+            SetupPrefab();
+
             var inputForwarder = mIceBlockPrefab.AddComponent<InputForwarder>();
             inputForwarder.OnMouseUpEvent += HandleMouseUpEvent;
             
-            Character.Disable();
+            if(Frozen)
+                Character.DisableMovement();
+            Character.DisableDragging();
+        }
+
+        private void SetupPrefab()
+        {
+            if (EffectPrefab == null)
+                Debug.LogError("Effect Prefab not set");
+
+            mIceBlockPrefab = Instantiate(EffectPrefab);
+            mIceBlockPrefab.transform.position = transform.position;
+            mIceBlockPrefab.transform.parent = transform;
         }
 
         private void HandleMouseUpEvent()
         {
             touchCnt++;
-            if (touchCnt >= TouchesToBreak)
+            if (touchCnt >= TapsToBreak)
             {
                 OnEffectComplete();
             }
@@ -36,7 +48,8 @@ namespace CrazySorting.CharacterEffects
             transform.parent = null;
             mIceBlockPrefab.GetComponent<InputForwarder>().OnMouseUpEvent -= HandleMouseUpEvent;
             
-            Character.Enable();
+            Character.EnableMovement();
+            Character.EnableDragging();
             
             Destroy(mIceBlockPrefab);
             Destroy(this);

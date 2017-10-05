@@ -18,12 +18,14 @@ class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
     {
         GetComponent<BoxCollider2D>().enabled = false;
         GetComponent<CircleCollider2D>().enabled = false;
+        enabled = false;
     }
 
     public void EnableDragging()
     {
         GetComponent<BoxCollider2D>().enabled = true;
-        GetComponent<CircleCollider2D>().enabled = false;
+        GetComponent<CircleCollider2D>().enabled = true;
+        enabled = true;
     }
 
     public virtual void Awake()
@@ -36,6 +38,9 @@ class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
 
     public virtual void OnMouseDown()
     {
+        if (!enabled)
+            return;
+        
         GetComponent<BoxCollider2D>().enabled = false;
 
         mPreviousScale = transform.localScale;
@@ -46,6 +51,9 @@ class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
 
     void OnMouseUp()
     {
+        if (!enabled)
+            return;
+        
         GetComponent<BoxCollider2D>().enabled = true;
 
         OnMouseUpInternal();
@@ -71,6 +79,9 @@ class DraggableCharacterBehaviour : MonoBehaviour, IDraggableCharacter
 
     public virtual void OnMouseDrag()
     {
+        if (!enabled)
+            return;
+        
         Vector3 newPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, mDistToCamera);
         transform.position = Camera.main.ScreenToWorldPoint(newPosition) + mOffset;
         transform.position = KeepPointOnScreen(transform.position);

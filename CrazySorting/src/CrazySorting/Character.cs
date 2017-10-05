@@ -23,22 +23,31 @@ class Character : MonoBehaviour
     {
         mActive = false;
         mEnrageCondition.Stop();
-        Disable();
+        DisableMovement();
+        DisableDragging();
+        GetComponent<Rigidbody2D>().simulated = false;
     }
 
-    public void Disable()
+    public void DisableMovement()
     {
-        mDraggableBehaviour.DisableDragging();
         mCharacterMover.EnableMovement(false);
     }
 
-    public void Enable()
+    public void DisableDragging()
+    {
+        mDraggableBehaviour.DisableDragging();
+    }
+
+    public void EnableMovement()
+    {
+        mCharacterMover.EnableMovement(true);
+    }
+
+    public void EnableDragging()
     {
         if (!mActive)
             return;
-        
         mDraggableBehaviour.EnableDragging();
-        mCharacterMover.EnableMovement(true);
     }
 
     public void Register(IDraggableCharacter draggable)

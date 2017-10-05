@@ -62,7 +62,6 @@ class CharacterMover : MonoBehaviour
     internal void EnableMovement(bool enabled)
     {
         this.enabled = enabled;
-        GetComponent<Rigidbody2D>().simulated = enabled;
     }
     
 }
