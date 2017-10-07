@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using CrazySorting.Utility;
+using UnityEngine;
 
 [RequireComponent(typeof(Character))]
 class CharacterMover : MonoBehaviour
@@ -6,12 +7,13 @@ class CharacterMover : MonoBehaviour
     public float Speed = 0.1f;
     public float TargetPadding = 0.5f;
 
+    [HideInInspector] [Dependency] public GroundBehaviour Ground;
+
     Vector3 mTargetPosition;
-    Bounds mBounds;
 
     void Awake()
     {
-        mBounds = GameObject.Find("ground").GetComponent<Renderer>().bounds;
+        this.Inject();
         GetComponent<Character>().Register(this);
     }
 
@@ -44,25 +46,14 @@ class CharacterMover : MonoBehaviour
         AcquireNewTarget();
     }
 
-    Vector2 GetRandomTarget(Bounds bounds)
-    {
-        return bounds.GetRandomPositionInBounds(TargetPadding);
-    }
-
     void AcquireNewTarget()
     {
-        AcquireNewTarget(new Vector2(1, 1));
+        mTargetPosition = Ground.GetRandomPositionOnGround(TargetPadding);
     }
 
-    void AcquireNewTarget(Vector2 bias)
+    internal void EnableMovement(bool enableMovement)
     {
-        mTargetPosition = Vector2.Scale(GetRandomTarget(mBounds), bias);
+        enabled = enableMovement;
     }
-    
-    internal void EnableMovement(bool enabled)
-    {
-        this.enabled = enabled;
-    }
-    
 }
 

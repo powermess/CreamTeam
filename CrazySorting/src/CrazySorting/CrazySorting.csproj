@@ -79,9 +79,11 @@
     <Compile Include="CharacterEffects\ACharacterEffect.cs" />
     <Compile Include="CharacterEffects\IceBlockEffect.cs" />
     <Compile Include="CharacterEffects\InputForwarder.cs" />
+    <Compile Include="CharacterEffects\ObjectSpawner.cs" />
     <Compile Include="CharacterMover.cs" />
     <Compile Include="CharacterSpawner.cs" />
     <Compile Include="DraggableCharacterBehaviour.cs" />
+    <Compile Include="EffectBehaviours\ObstacleMover.cs" />
     <Compile Include="Enraging\EnrageEffectBehaviour.cs" />
     <Compile Include="Enraging\GameOverEnrageEffectBehaviour.cs" />
     <Compile Include="Enraging\IceBlockAreaEnrageEffectBehaviour.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="FPSDisplay.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GoalMover.cs" />
+    <Compile Include="GroundBehaviour.cs" />
     <Compile Include="IDraggableCharacter.cs" />
     <Compile Include="IGame.cs" />
     <Compile Include="IoCFramework\AbstractBootstrapper.cs" />
