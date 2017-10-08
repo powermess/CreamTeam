@@ -46,5 +46,11 @@ namespace CrazySorting.Utility
         {
             Debug.Log(string.Format(self, parameters));
         }
+
+        public static T RandomElement<T>(this IEnumerable<T> self)
+        {
+            var ran = UnityEngine.Random.Range(0, self.Count());
+            return self.ElementAt(ran);
+        }
     }
 }

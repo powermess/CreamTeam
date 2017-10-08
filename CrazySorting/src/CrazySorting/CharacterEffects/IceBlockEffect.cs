@@ -12,7 +12,7 @@ namespace CrazySorting.CharacterEffects
         GameObject mIceBlockPrefab;
         int touchCnt;
         
-        void Awake()
+        void Start()
         {
             SetupPrefab();
 
