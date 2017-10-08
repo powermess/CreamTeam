@@ -12,9 +12,7 @@ namespace CrazySorting.Utility
 
         public Vector2 GetRandomPositionOnGround(float padding = 0)
         {
-            Debug.Log(string.Format("Bounds: {0}", Bounds.ToString()));
             var randomPositionInBounds = Bounds.GetRandomPositionInBounds(padding);
-            Debug.Log(string.Format("Random position in bounds: {0}", randomPositionInBounds));
             return randomPositionInBounds;
         }
     }

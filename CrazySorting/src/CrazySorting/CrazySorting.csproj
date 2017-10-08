@@ -76,13 +76,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BootStrapper.cs" />
+    <Compile Include="CharacterDragging\DraggableCharacterBehaviour.cs" />
+    <Compile Include="CharacterDragging\IDraggableCharacter.cs" />
+    <Compile Include="CharacterDragging\SlingshotCharacterBehaviour.cs" />
+    <Compile Include="CharacterDragging\ThrowableCharacterBehaviour.cs" />
     <Compile Include="CharacterEffects\ACharacterEffect.cs" />
     <Compile Include="CharacterEffects\IceBlockEffect.cs" />
     <Compile Include="CharacterEffects\InputForwarder.cs" />
     <Compile Include="CharacterEffects\ObjectSpawner.cs" />
-    <Compile Include="CharacterMover.cs" />
+    <Compile Include="CharacterMovement\CharacterMover.cs" />
     <Compile Include="CharacterSpawner.cs" />
-    <Compile Include="DraggableCharacterBehaviour.cs" />
     <Compile Include="EffectBehaviours\ObstacleMover.cs" />
     <Compile Include="Enraging\EnrageEffectBehaviour.cs" />
     <Compile Include="Enraging\GameOverEnrageEffectBehaviour.cs" />
@@ -93,7 +96,6 @@
     <Compile Include="Game.cs" />
     <Compile Include="GoalMover.cs" />
     <Compile Include="GroundBehaviour.cs" />
-    <Compile Include="IDraggableCharacter.cs" />
     <Compile Include="IGame.cs" />
     <Compile Include="IoCFramework\AbstractBootstrapper.cs" />
     <Compile Include="IoCFramework\Attributes\Dependency.cs" />
@@ -111,8 +113,6 @@
     <Compile Include="Enraging\EnrageConditionBehaviour.cs" />
     <Compile Include="SpawnPoint.cs" />
     <Compile Include="Stage.cs" />
-    <Compile Include="SlingshotCharacterBehaviour.cs" />
-    <Compile Include="ThrowableCharacterBehaviour.cs" />
     <Compile Include="UnityExtensionMethods.cs" />
     <Compile Include="Utility\MethodExtensions.cs" />
   </ItemGroup>

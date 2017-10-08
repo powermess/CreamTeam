@@ -1,4 +1,5 @@
-﻿using CrazySorting.Utility;
+﻿using System.Linq;
+using CrazySorting.Utility;
 using UnityEngine;
 
 [RequireComponent(typeof(Character))]
@@ -10,6 +11,8 @@ class CharacterMover : MonoBehaviour
     [HideInInspector] [Dependency] public GroundBehaviour Ground;
 
     Vector3 mTargetPosition;
+    const float NEW_TARGET_COOLDOWN = 0.25f;
+    float mTimeSinceLastTargetAcquired;
 
     void Awake()
     {
@@ -29,12 +32,15 @@ class CharacterMover : MonoBehaviour
 
     void Update()
     {
+        mTimeSinceLastTargetAcquired += Time.deltaTime;
+        
         var step = Speed / 100f * (1 + Time.timeSinceLevelLoad / 100f);
 
         if (Vector3.Distance(transform.position, mTargetPosition) < step)
             AcquireNewTarget();
 
         GetComponent<Rigidbody2D>().MovePosition(Vector3.MoveTowards(transform.position, mTargetPosition, step));
+        Debug.DrawLine(transform.position, mTargetPosition, Color.blue);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -46,11 +52,33 @@ class CharacterMover : MonoBehaviour
         AcquireNewTarget();
     }
 
-    void AcquireNewTarget()
+    private void OnCollisionStay2D(Collision2D other)
     {
-        mTargetPosition = Ground.GetRandomPositionOnGround(TargetPadding);
+        AcquireNewTarget();
     }
 
+    void AcquireNewTarget()
+    {
+        if (mTimeSinceLastTargetAcquired < NEW_TARGET_COOLDOWN)
+            return;
+
+
+        //try to find a new target which currently has no immediate characters to collide with
+        for (var i = 0; i < 3; i++)
+        {
+            mTargetPosition = Ground.GetRandomPositionOnGround(TargetPadding);
+
+            var direction = mTargetPosition - transform.position;
+            var distance = Mathf.Min(Vector2.Distance(transform.position, mTargetPosition), 1f); //max 1, only check for collisions in immediate neighborhood
+            var hit = Physics2D.RaycastAll(transform.position, direction, distance);
+
+            if (hit.Length == 0 || !hit.Any(h => h.collider.gameObject != this.gameObject)) //if no other collisions, target is ok
+                break;
+        }
+        
+        mTimeSinceLastTargetAcquired = 0;
+    }
+    
     internal void EnableMovement(bool enableMovement)
     {
         enabled = enableMovement;
